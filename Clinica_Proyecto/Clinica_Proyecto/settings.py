@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,6 +99,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Configuración de Jazzmin
+JAZZMIN_SETTINGS = {
+    "site_title": "Clínica",
+    "site_header": "Panel de Administración",
+    "welcome_sign": "Bienvenido al panel de la Clínica",
+    "site_brand": "Clínica",
+    "copyright": "© 2025 Clínica",
+    "show_ui_builder": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "cosmo",  
+    "navbar": "navbar-dark",
+    "footer_fixed": True,
+}
+
 
 
 # Internationalization
