@@ -129,30 +129,6 @@ http://127.0.0.1:8000/
 
 ---
 
-## 🧭 Estructura del proyecto
-
-```
-Clinica/
-│
-├── Clinica/                  # Configuración principal del proyecto Django
-│   ├── settings.py           # Configuración global
-│   ├── urls.py               # Enrutamiento principal
-│   ├── wsgi.py / asgi.py     # Entradas del servidor
-│
-├── app_clinica/              # Aplicación con modelos, vistas y administración
-│   ├── models.py
-│   ├── admin.py
-│   ├── views.py
-│   ├── forms.py
-│   └── templates/
-│
-├── manage.py                 # Punto de entrada de Django
-├── requirements.txt          # Dependencias del proyecto
-└── README.md                 # Este archivo
-```
-
----
-
 ## 🧰 Comandos útiles de Django
 
 | Acción                        | Comando                            |
