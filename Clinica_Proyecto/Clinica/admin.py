@@ -21,6 +21,11 @@ from .models import (
     Voluntad_Anticipada,
 )
 
+admin.site.site_header = "Administración Clínica PAJD"
+admin.site.site_title = "Administración Clínica PAJD"
+admin.site.index_title = "Panel de Administración Clínica PAJD"
+
+
 # ============================================================================
 # BASIC REFERENCE MODELS
 # ============================================================================
