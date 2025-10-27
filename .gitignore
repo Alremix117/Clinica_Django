@@ -215,5 +215,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Migrations
-Clinica/migrations/
+# --- Migraciones ---
+# Ignora todas las migraciones excepto __init__.py
+**/migrations/*
+!**/migrations/__init__.py
