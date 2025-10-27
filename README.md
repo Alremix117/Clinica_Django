@@ -97,6 +97,7 @@ DATABASE_URL=sqlite:///db.sqlite3
 Ejecuta los siguientes comandos en la raíz del proyecto:
 
 ```bash
+cd Clinica_Proyecto/
 python manage.py makemigrations
 python manage.py migrate
 ```
