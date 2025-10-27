@@ -33,7 +33,7 @@ class Pais(models.Model):
     )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre_pais
 
     class Meta:
         verbose_name = "País"
@@ -69,7 +69,7 @@ class Municipio(models.Model):
     )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre_municipio
 
     class Meta:
         verbose_name = "Municipio"
@@ -105,7 +105,7 @@ class Ocupacion(models.Model):
     )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre_ocupacion
 
     class Meta:
         verbose_name = "Ocupación"
@@ -243,7 +243,7 @@ class Tipo_documento(models.Model):
     )
 
     def __str__(self):
-        return self.nombre_tipo_documento
+        return f'{self.codigo_tipo_documento} - {self.nombre_tipo_documento}'
 
     class Meta:
         verbose_name = "Tipo de Documento"
@@ -382,6 +382,9 @@ class Paciente_Discapacidad(models.Model):
     id_discapacidad = models.OneToOneField(Discapacidad, on_delete=models.CASCADE)
     paciente_UUID = models.OneToOneField(Paciente, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Discapacidad {self.id_discapacidad} del Paciente {self.paciente_UUID}"
+    
     class Meta:
         unique_together = ('id_discapacidad', 'paciente_UUID')
         verbose_name = "Paciente Discapacidad"
@@ -399,6 +402,9 @@ class Oposicion_Donacion(models.Model):
     )
     fecha_suscripcion_documento = models.DateField(verbose_name="Fecha de Suscripción del Documento")
 
+    def __str__(self):
+        return f"Oposición Donación Paciente {self.paciente_UUID}"
+    
     class Meta:
         verbose_name = "Oposición a Donación"
         verbose_name_plural = "Oposiciones a Donación"
@@ -407,7 +413,10 @@ class Oposicion_Donacion(models.Model):
 class Paciente_Pais(models.Model):
     paciente_UUID = models.OneToOneField(Paciente, on_delete=models.CASCADE, primary_key=True)
     codigo_pais = models.OneToOneField(Pais, on_delete=models.CASCADE)
-
+    
+    def __str__(self):
+        return f"País {self.codigo_pais} del Paciente {self.paciente_UUID}"
+    
     class Meta:
         unique_together = ('paciente_UUID', 'codigo_pais')
         verbose_name = "Paciente País"
@@ -427,6 +436,9 @@ class Voluntad_Anticipada(models.Model):
     codigo_entidad_prestadora = models.ForeignKey(
         Entidad_Prestadora_Salud, on_delete=models.CASCADE, verbose_name="Entidad Prestadora"
     )
+
+    def __str__(self):
+        return f"Voluntad Anticipada Paciente {self.paciente_UUID}"
 
     class Meta:
         verbose_name = "Voluntad Anticipada"
