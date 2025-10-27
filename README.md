@@ -34,11 +34,9 @@ Sigue estos pasos para ejecutar el proyecto **Clinica** en un nuevo entorno.
 ### 1️⃣ Clonar el repositorio
 
 ```bash
-git clone https://github.com/<tu_usuario>/<nombre_del_repositorio>.git
+git clone https://github.com/Alremix117/Clinica_Django.git
 cd Clinica
 ```
-
-> 💡 Reemplaza `<tu_usuario>` y `<nombre_del_repositorio>` con tus valores reales de GitHub.
 
 ---
 
