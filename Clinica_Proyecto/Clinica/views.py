@@ -54,8 +54,8 @@ def paciente_edit(request, id):
         form_paciente = FormPaciente(request.POST, instance=paciente)
         form_nacionalidad = FormNacionalidad(request.POST)
         form_discapacidad = FormDiscapacidad(request.POST)
-        form_voluntad = FormVoluntadAnticipada(request.POST)
-        form_oposicion = FormOposicionDonacion(request.POST)
+        form_voluntad = FormVoluntadAnticipada(request.POST, instance=paciente)
+        form_oposicion = FormOposicionDonacion(request.POST, instance=paciente)
 
         if form_paciente.is_valid() and form_nacionalidad.is_valid() and form_discapacidad.is_valid():
             form_paciente.save() and form_voluntad.save() and form_oposicion.save()

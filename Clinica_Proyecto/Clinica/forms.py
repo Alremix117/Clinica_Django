@@ -3,9 +3,7 @@ from .models import Paciente, Voluntad_Anticipada, Oposicion_Donacion, Pais, Dis
 
 class FormPaciente(forms.ModelForm):    
     fecha_nacimiento = forms.DateTimeField(
-        widget=forms.DateTimeInput(
-            attrs={'type': 'date', 'placeholder': 'YYYY-MM-DD HH:mm'}
-        ),
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         input_formats=['%Y-%m-%d %H:%M'],
         label="Fecha de Nacimiento"
     )
@@ -45,7 +43,7 @@ class FormDiscapacidad(forms.Form):
 
 class FormVoluntadAnticipada(forms.ModelForm):
     fecha_suscripcion_documento = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}),
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         input_formats=['%Y-%m-%d %H:%M'],
         required=False
     )
@@ -61,7 +59,7 @@ class FormVoluntadAnticipada(forms.ModelForm):
 
 class FormOposicionDonacion(forms.ModelForm):
     fecha_suscripcion_documento = forms.DateField(
-        widget=forms.DateTimeInput(attrs={'type': 'date'}),
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         input_formats=['%Y-%m-%d %H:%M'],
         required=False
     )
@@ -78,6 +76,7 @@ class FormOposicionDonacion(forms.ModelForm):
 class FormContactoSalud(forms.ModelForm):
     fecha_hora_inicio_atencion = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        input_formats=['%Y-%m-%d %H:%M'],
         label="Fecha y Hora Inicio Atención"
     )
     fecha_hora_triage = forms.DateTimeField(
@@ -88,7 +87,6 @@ class FormContactoSalud(forms.ModelForm):
     class Meta:
         model = Contacto_Servicio_Salud
         fields = [
-            'paciente_UUID',
             'fecha_hora_inicio_atencion',
             'codigo_entidad_prestadora',
             'codigo_modalidad_realizacion_tecnologia_salud',
@@ -103,7 +101,6 @@ class FormContactoSalud(forms.ModelForm):
             'tipo_diagnostico',
         ]
         labels = {
-            'paciente_UUID': 'Paciente',
             'codigo_entidad_prestadora': 'Entidad Prestadora de Salud',
             'codigo_modalidad_realizacion_tecnologia_salud': 'Modalidad de Realización',
             'grupo_servicios': 'Grupo de Servicios',
