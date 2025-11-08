@@ -25,6 +25,25 @@ class FormPaciente(forms.ModelForm):
             'comunidad_Etnica', 'entidad_prestadora_salud'
         ]
 
+class FormPacienteEdit(forms.ModelForm):    
+    segundo_nombre = forms.CharField(
+        required=False,
+    )
+
+    segundo_apellido = forms.CharField(
+        required=False,
+    )
+
+    class Meta:
+        model = Paciente
+        fields = [
+            'tipo_documento', 'numero_documento', 'primer_nombre', 'segundo_nombre',
+            'primer_apellido', 'segundo_apellido',
+            'sexo_biologico', 'identidad_genero', 'zona_territorial_residencia',
+            'residencia', 'ocupacion', 'etnia',
+            'comunidad_Etnica', 'entidad_prestadora_salud'
+        ]
+
 class FormNacionalidad(forms.Form):
     paises = forms.ModelMultipleChoiceField(
         queryset=Pais.objects.all(),
