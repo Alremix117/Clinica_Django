@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Eliminar Paciente</h2>
+
+<p>¿Estás seguro de que deseas eliminar al paciente:</p>
+<p><strong>{{ paciente }}</strong></p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">❌ Confirmar eliminación</button>
+</form>
+
+<br>
+<a href="{% url 'paciente_detail' paciente.paciente_UUID %}">Cancelar</a>
+
+{% endblock %}
