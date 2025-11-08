@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h2>{% if object %}Editar{% else %}Nuevo{% endif %} paciente</h2>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  <!-- ------ Form principal ------ -->
+  <fieldset class="mb-4">
+    <legend>Datos del paciente</legend>
+    {{ form.non_field_errors }}
+    <div class="row">
+      {% for field in form %}
+        <div class="col-12 col-md-6 mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <!-- ------ Formset Nacionalidades ------ -->
+  <fieldset class="mb-4">
+    <legend>Nacionalidades</legend>
+    {{ pais_formset.management_form }}
+    {% for f in pais_formset %}
+      <div class="row align-items-end mb-2">
+        <div class="col-md-6">
+          {{ f.pais.errors }}
+          <label class="form-label">País</label>
+          {{ f.pais }}
+        </div>
+        <div class="col-md-3">
+          {% if f.instance.pk %}
+            <label class="form-label d-block">Eliminar</label>
+            {{ f.DELETE }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+    <!-- Botón para clonar una fila vacía vía JS (opcional) -->
+    <button type="button" class="btn btn-outline-secondary" id="add-pais">Añadir país</button>
+  </fieldset>
+
+  <!-- ------ Formset Discapacidades ------ -->
+  <fieldset class="mb-4">
+    <legend>Discapacidades</legend>
+    {{ discapacidad_formset.management_form }}
+    {% for f in discapacidad_formset %}
+      <div class="row align-items-end mb-2">
+        <div class="col-md-6">
+          {{ f.discapacidad.errors }}
+          <label class="form-label">Discapacidad</label>
+          {{ f.discapacidad }}
+        </div>
+        <div class="col-md-3">
+          {% if f.instance.pk %}
+            <label class="form-label d-block">Eliminar</label>
+            {{ f.DELETE }}
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+    <button type="button" class="btn btn-outline-secondary" id="add-disc">Añadir discapacidad</button>
+  </fieldset>
+
+  {% url Cancelar</a>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+<!-- (Opcional) JS mínimo para duplicar formularios vacíos usando el management_form -->
+<script>
+(function() {
+  function addForm(prefix) {
+    const total = document.getElementById('id_' + prefix + '-TOTAL_FORMS');
+    const formCount = parseInt(total.value, 10);
+    const formRegex = new RegExp(prefix + '-(\\d+)-', 'g');
+
+    // Busca el último form del prefix y clónalo
+    const forms = document.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]').length ?
+                  document.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]').length :
+                  formCount;
+
+    const container = document.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]').length ?
+                      document.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]')[0].closest('fieldset') :
+                      document.querySelector('fieldset');
+
+    const lastRow = container.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]').length ?
+                    container.querySelectorAll('[name^="' + prefix + '-"][name$="-DELETE"]')[formCount-1].closest('.row') :
+                    container.querySelectorAll('.row.align-items-end').item(formCount-1);
+
+    const newRow = lastRow.cloneNode(true);
+    newRow.querySelectorAll('input, select').forEach(el => {
+      if (el.name) {
+        el.name = el.name.replace(formRegex, prefix + '-' + formCount + '-');
+        el.id   = el.id.replace(formRegex, prefix + '-' + formCount + '-');
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        if (el.type === 'checkbox') el.checked = false;
+      }
+    });
+    // Inserta
+    lastRow.parentNode.insertBefore(newRow, lastRow.nextSibling);
+    total.value = formCount + 1;
+  }
+
+  document.getElementById('add-pais')?.addEventListener('click', function(){ addForm('paciente_pais_set'); });
+  document.getElementById('add-disc')?.addEventListener('click', function(){ addForm('paciente_discapacidad_set'); });
+})();
+</script>
+
+{% endblock %}
+

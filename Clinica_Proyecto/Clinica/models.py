@@ -363,8 +363,8 @@ class Paciente(models.Model):
     entidad_prestadora_salud = models.ForeignKey(Entidad_Prestadora_Salud, on_delete=models.SET_NULL, null=True, verbose_name="Código Entidad Prestadora de Salud")
 
 
-    nacionalidad = models.ManyToManyField(Pais, through='Paciente_Pais', blank=True)
-    discapacidades = models.ManyToManyField(Discapacidad, through='Paciente_Discapacidad', blank=True)
+    nacionalidad = models.ManyToManyField(Pais, through='Paciente_Pais', related_name='pacientes', blank=True)
+    discapacidades = models.ManyToManyField(Discapacidad, through='Paciente_Discapacidad', related_name='pacientes', blank=True)
 
     def __str__(self):
         return f"{self.primer_nombre} {self.primer_apellido} ({self.numero_documento})"
@@ -375,8 +375,8 @@ class Paciente(models.Model):
         ordering = ["primer_apellido", "primer_nombre"]
 
 class Paciente_Discapacidad(models.Model):
-    id_discapacidad = models.ForeignKey(Discapacidad, on_delete=models.CASCADE)
-    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    id_discapacidad = models.ForeignKey(Discapacidad, on_delete=models.CASCADE, related_name='pacientes_rel')
+    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='discapacidades_rel')
 
     def __str__(self):
         return f"Discapacidad {self.id_discapacidad} del Paciente {self.paciente_UUID}"
@@ -407,8 +407,8 @@ class Oposicion_Donacion(models.Model):
         ordering = ["id_oposicion"]
 
 class Paciente_Pais(models.Model):
-    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    codigo_pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
+    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paises_rel')
+    codigo_pais = models.ForeignKey(Pais, on_delete=models.CASCADE, related_name='pacientes_rel')
     
     def __str__(self):
         return f"País {self.codigo_pais} del Paciente {self.paciente_UUID}"

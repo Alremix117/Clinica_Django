@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Eliminar paciente</h2>
+<p>¿Estás seguro de eliminar al paciente <strong>{{ object.primer_nombre }} {{ object.primer_apellido }}</strong> ({{ object.numero_documento }})?</p>
+
+<form method="post">
+  {% csrf_token %}
+  {% url Cancelar</a>
+  <button type="submit" class="btn btn-danger">Eliminar</button>
+</form>
+{% endblock %}

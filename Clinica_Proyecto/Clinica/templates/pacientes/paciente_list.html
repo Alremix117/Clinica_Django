@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Pacientes</h1>
+
+<form method="get" class="mb-3">
+  <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar (doc/nombres/apellidos)" />
+  <button type="submit">Buscar</button>
+  {% url + Nuevo paciente}</a>
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Documento</th>
+      <th>Nombre</th>
+      <th>Sexo</th>
+      <th>Identidad de género</th>
+      <th>Zona</th>
+      <th>Tipo Doc</th>
+      <th>Residencia</th>
+      <th>Ocupación</th>
+      <th>Etnia</th>
+      <th>Comunidad</th>
+      <th>Entidad prestadora</th>
+      <th>Nacionalidades</th>
+      <th>Discapacidades</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for p in pacientes %}
+    <tr>
+      <td>{{ p.numero_documento }}</td>
+      <td>{{ p.primer_nombre }} {{ p.segundo_nombre }} {{ p.primer_apellido }} {{ p.segundo_apellido }}</td>
+      <td>{{ p.get_sexo_biologico_display }}</td>
+      <td>{{ p.get_identidad_genero_display }}</td>
+      <td>{{ p.get_zona_territorial_residencia_display }}</td>
+      <td>{{ p.tipo_documento }}</td>
+      <td>{{ p.residencia }}</td>
+      <td>{{ p.ocupacion }}</td>
+      <td>{{ p.etnia }}</td>
+      <td>{{ p.comunidad_Etnica|default:"—" }}</td>
+      <td>{{ p.entidad_prestadora_salud }}</td>
+      <td>
+        {% for pais in p.nacionalidad.all %}
+          {{ pais.nombre_pais }}{% if not forloop.last %}, {% endif %}
+        {% empty %} —
+        {% endfor %}
+      </td>
+      <td>
+        {% for d in p.discapacidades.all %}
+          {{ d.nombre_discapacidad }}{% if not forloop.last %}, {% endif %}
+        {% empty %} —
+        {% endfor %}
+      </td>
+      <td>
+        {% url Editar</a> •
+        {% url Eliminar</a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="14">No hay pacientes registrados.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if is_paginated %}
+<nav aria-label="Paginación">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">?page={{ page_obj.previous_page_number }}«</a></li>
+    {% endif %}
+    <li class="page-item disabled"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+    {% if page_obj.has_next %}
+      <li class="page-item">?page={{ page_obj.next_page_number }}»</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+{% endblock %}
