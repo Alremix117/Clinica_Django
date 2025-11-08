@@ -2,6 +2,13 @@
 {% load static %}
 {% block content %}
 <h2>Información del Paciente</h2>
+<a href="{% url 'contacto_salud_list' paciente.paciente_UUID %}" class="btn btn-primary">
+  Ver contactos de salud
+</a>
+<a href="{% url 'contacto_salud_create' paciente.paciente_UUID %}" class="btn btn-success">
+  Registrar nuevo contacto
+</a>
+
 
 <p><strong>Documento:</strong> {{ paciente.numero_documento }}</p>
 <p><strong>Nombre:</strong> {{ paciente.primer_nombre }} {{ paciente.segundo_nombre }} {{ paciente.primer_apellido }} {{ paciente.segundo_apellido }}</p>

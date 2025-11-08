@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Detalle del Contacto{% endblock %}
+
+{% block content %}
+<div class="contacto-container">
+  <h2>Detalle del contacto</h2>
+
+  <ul class="detalle">
+    <li><strong>Fecha Inicio Atención:</strong> {{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</li>
+    <li><strong>Entidad Prestadora:</strong> {{ contacto.codigo_entidad_prestadora }}</li>
+    <li><strong>Modalidad:</strong> {{ contacto.codigo_modalidad_realizacion_tecnologia_salud }}</li>
+    <li><strong>Grupo Servicios:</strong> {{ contacto.get_grupo_servicios_display }}</li>
+    <li><strong>Entorno Atención:</strong> {{ contacto.get_entorno_atencion_display }}</li>
+    <li><strong>Causa/Motivo Atención:</strong> {{ contacto.codigo_causa_motivo_atencion }}</li>
+    <li><strong>Clasificación Triage:</strong> {{ contacto.get_clasificacion_triage_display }}</li>
+    <li><strong>Diagnóstico:</strong> {{ contacto.codigo_diagnostico }}</li>
+    <li><strong>Tipo Diagnóstico:</strong> {{ contacto.get_tipo_diagnostico_display }}</li>
+  </ul>
+
+  <div class="contacto-details">
+    <a href="{% url 'contacto_salud_edit' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-warning">✏️ Editar</a>
+    <a href="{% url 'contacto_salud_delete' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-danger">🗑️ Eliminar</a>
+    <a href="{% url 'contacto_salud_list' id_paciente=paciente.paciente_UUID %}" class="btn btn-secondary">⬅️ Volver</a>
+  </div>
+</div>
+{% endblock %}

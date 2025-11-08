@@ -1,0 +1,151 @@
+/* ================================
+   CONTACTO SALUD - CRUD STYLES
+   ================================ */
+
+.contacto-container {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-top: 1rem;
+}
+
+/* Encabezado del módulo */
+.contacto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e6eef7;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.contacto-header h2 {
+    color: #003366;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.contacto-header .actions a {
+    margin-left: 0.5rem;
+}
+
+/* ======== LISTA ======== */
+.contacto-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.contacto-list-table th,
+.contacto-list-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.contacto-list-table th {
+    background-color: #f1f6fb;
+    color: #003366;
+    text-align: left;
+    font-weight: 600;
+}
+
+.contacto-list-table tr:hover {
+    background-color: #f8fbff;
+}
+
+/* Acciones (editar, eliminar, ver) */
+.table-actions {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.table-actions a {
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* ======== FORMULARIO ======== */
+.contacto-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem 2rem;
+}
+
+.contacto-form label {
+    font-weight: 600;
+    color: #003366;
+}
+
+.contacto-form input,
+.contacto-form select,
+.contacto-form textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    background-color: #f9fbfc;
+    transition: border-color 0.2s ease;
+}
+
+.contacto-form input:focus,
+.contacto-form select:focus,
+.contacto-form textarea:focus {
+    border-color: #007bff;
+    background-color: #fff;
+    outline: none;
+}
+
+/* Botones del formulario */
+.contacto-form .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+/* ======== DETALLES ======== */
+.contacto-details {
+    background-color: #f9fcff;
+    border: 1px solid #e1ecf4;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.contacto-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.contacto-details li {
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed #d3e0ed;
+}
+
+.contacto-details li strong {
+    color: #003366;
+}
+
+/* ======== CONFIRMAR ELIMINACIÓN ======== */
+.contacto-delete {
+    background: #fff7f7;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.contacto-delete p {
+    color: #721c24;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.contacto-delete .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
