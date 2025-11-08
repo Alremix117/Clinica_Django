@@ -1,0 +1,14 @@
+.btn {
+    display: inline-block;
+    background-color: var(--color-secondary);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--color-primary);
+}
