@@ -1,30 +1,38 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <h2>Editar Paciente: {{ paciente }}</h2>
 
 <form method="POST">
-    {% csrf_token %}
+  {% csrf_token %}
 
-    <fieldset>
-        <legend>Datos Generales</legend>
-        {{ form_paciente.as_p }}
-    </fieldset>
+  <fieldset>
+    <legend>Datos Generales</legend>
+    {{ form_paciente.as_p }}
+  </fieldset>
 
-    <fieldset>
-        <legend>Nacionalidades</legend>
-        {{ form_nacionalidad.as_p }}
-    </fieldset>
+  <fieldset>
+    <legend>Nacionalidades</legend>
+    {{ form_nacionalidad.as_p }}
+  </fieldset>
 
-    <fieldset>
-        <legend>Discapacidades</legend>
-        {{ form_discapacidad.as_p }}
-    </fieldset>
+  <fieldset>
+    <legend>Discapacidades</legend>
+    {{ form_discapacidad.as_p }}
+  </fieldset>
 
-    <button type="submit">💾 Guardar cambios</button>
+  <fieldset>
+    <legend>Voluntad Anticipada</legend>
+    {{ form_voluntad.as_p }}
+  </fieldset>
+
+  <fieldset>
+    <legend>Oposición a la Donación de Órganos</legend>
+    {{ form_oposicion.as_p }}
+  </fieldset>
+
+  <button type="submit">💾 Guardar cambios</button>
 </form>
 
-<br>
+<br />
 <a href="{% url 'paciente_detail' paciente.paciente_UUID %}">⬅ Regresar</a>
 
 {% endblock %}

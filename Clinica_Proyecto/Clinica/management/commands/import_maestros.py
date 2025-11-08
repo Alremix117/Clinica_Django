@@ -12,7 +12,7 @@ from Clinica.models import (
     Pais, Municipio, Ocupacion, Etnia, Comunidad_Etnica, Discapacidad,
     Tipo_documento, Entidad_Prestadora_Salud,
     Modalidad_Realizacion_Tecnologia_Salud, Via_Ingreso_Servicio_Salud,
-    Motivo_Atencion, Enfermedad_Huerfana, Diagnostico
+    Motivo_Atencion, Enfermedad_Huerfana, Diagnostico, Paciente, Paciente_Pais, Paciente_Discapacidad
 )
 
 # -------- Utilidades de IO -------- #
@@ -71,11 +71,90 @@ def upsert_simple(df: pd.DataFrame, model, key: str, fields_map: Dict[str, str])
             updated += 1
     return created, updated
 
+def import_pacientes(df: pd.DataFrame):
+    created = updated = 0
+
+    for _, row in df.iterrows():
+        paciente_uuid = row["paciente_UUID"]
+
+        # RESOLVER FK
+        defaults = {
+            "numero_documento": row["numero_documento"],
+            "primer_nombre": row["primer_nombre"],
+            "segundo_nombre": row["segundo_nombre"],
+            "primer_apellido": row["primer_apellido"],
+            "segundo_apellido": row["segundo_apellido"],
+            "fecha_nacimiento": row["fecha_nacimiento"],
+
+            # FK -> código_id
+            "sexo_biologico_id": row["sexo_biologico"],
+            "identidad_genero_id": row["identidad_genero"],
+            "zona_territorial_residencia_id": row["zona_territorial_residencia"],
+            "tipo_documento_id": row["tipo_documento"],
+            "residencia_id": row["residencia"],
+            "ocupacion_id": row["ocupacion"],
+            "etnia_id": row["etnia"],
+            "comunidad_Etnica_id": row["comunidad_Etnica"] or None,
+            "entidad_prestadora_salud_id": row["entidad_prestadora_salud"]
+        }
+
+        obj, was_created = Paciente.objects.update_or_create(
+            paciente_UUID=paciente_uuid,
+            defaults=defaults
+        )
+
+        if was_created:
+            created += 1
+        else:
+            updated += 1
+
+    return created, updated
+
+def import_paciente_pais(df: pd.DataFrame):
+    created = updated = 0
+    for _, row in df.iterrows():
+        paciente = Paciente.objects.get(paciente_UUID=row["paciente_UUID"])
+        pais = Pais.objects.get(codigo_pais=row["codigo_pais"])
+
+        _, was_created = Paciente_Pais.objects.update_or_create(
+            paciente_UUID=paciente,
+            codigo_pais=pais
+        )
+
+        if was_created:
+            created += 1
+        else:
+            updated += 1
+    return created, updated
+
+def import_paciente_discapacidad(df: pd.DataFrame):
+    created = updated = 0
+
+    for _, row in df.iterrows():
+        paciente = Paciente.objects.get(paciente_UUID=row["paciente_UUID"])
+        disc = Discapacidad.objects.get(id_discapacidad=row["id_discapacidad"])
+
+        _, was_created = Paciente_Discapacidad.objects.update_or_create(
+            paciente_UUID=paciente,
+            id_discapacidad=disc
+        )
+
+        if was_created:
+            created += 1
+        else:
+            updated += 1
+
+    return created, updated
+
+
 class Command(BaseCommand):
     help = "Importa catálogos maestros (idempotente) desde CSV/XLSX/JSON para tus modelos."
 
     def add_arguments(self, parser):
         # Un argumento por catálogo (opcional, para cargar solo lo que necesites).
+        parser.add_argument("--paciente", type=str, help="Archivo de Pacientes")
+        parser.add_argument("--paciente_pais", type=str, help="Tabla de paciente_pais")
+        parser.add_argument("--paciente_discapacidad", type=str, help="Tabla de paciente_discapacidad")
         parser.add_argument("--pais", type=str, help="Archivo de País (codigo_pais, nombre_pais)")
         parser.add_argument("--municipio", type=str, help="Archivo de Municipio (codigo_municipio, nombre_municipio)")
         parser.add_argument("--ocupacion", type=str, help="Archivo de Ocupación (codigo_ocupacion, nombre_ocupacion)")
@@ -111,6 +190,27 @@ class Command(BaseCommand):
                 df = read_table(path)
                 ensure_columns(df, required, label)
                 loaders.append((label, df, fn))
+
+        add("paciente", opts["paciente"], [
+            "paciente_UUID", "numero_documento",
+            "primer_nombre", "segundo_nombre",
+            "primer_apellido", "segundo_apellido",
+            "fecha_nacimiento",
+            "sexo_biologico", "identidad_genero",
+            "zona_territorial_residencia",
+            "tipo_documento", "residencia",
+            "ocupacion", "etnia",
+            "comunidad_Etnica",
+            "entidad_prestadora_salud"
+        ], import_pacientes)
+
+        add("paciente_pais", opts["paciente_pais"],
+            ["paciente_UUID", "codigo_pais"],
+            import_paciente_pais)
+
+        add("paciente_discapacidad", opts["paciente_discapacidad"],
+            ["paciente_UUID", "id_discapacidad"],
+            import_paciente_discapacidad)
 
         add("pais", opts["pais"], ["codigo_pais", "nombre_pais"],
             lambda df: upsert_simple(df, Pais, "codigo_pais", {"nombre_pais": "nombre_pais"}))

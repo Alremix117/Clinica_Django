@@ -318,6 +318,8 @@ class Paciente(models.Model):
     )
     segundo_nombre = models.CharField(
         max_length=60, 
+        blank=True,
+        null=True,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -340,6 +342,8 @@ class Paciente(models.Model):
     )
     segundo_apellido = models.CharField(
         max_length=60,
+        blank=True,
+        null=True,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -358,9 +362,9 @@ class Paciente(models.Model):
     tipo_documento = models.ForeignKey(Tipo_documento, on_delete=models.SET_NULL, null=True, verbose_name="Código Tipo de Documento")
     residencia = models.ForeignKey(Municipio, on_delete=models.SET_NULL, null=True, verbose_name="Código Municipio de Residencia")
     ocupacion = models.ForeignKey(Ocupacion, on_delete=models.SET_NULL, null=True, verbose_name="Código Ocupación")
-    etnia = models.ForeignKey(Etnia, on_delete=models.SET_NULL, null=True, verbose_name="Código Étnia")
+    etnia = models.ForeignKey(Etnia, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Código Étnia")
     comunidad_Etnica = models.ForeignKey(Comunidad_Etnica, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Código Comunidad Étnica")
-    entidad_prestadora_salud = models.ForeignKey(Entidad_Prestadora_Salud, on_delete=models.SET_NULL, null=True, verbose_name="Código Entidad Prestadora de Salud")
+    entidad_prestadora_salud = models.ForeignKey(Entidad_Prestadora_Salud, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Código Entidad Prestadora de Salud")
 
 
     nacionalidad = models.ManyToManyField(Pais, through='Paciente_Pais', related_name='pacientes', blank=True)
@@ -396,7 +400,7 @@ class Oposicion_Donacion(models.Model):
         choices=MANIFESTACION_OPOSICION_CHOICES,
         verbose_name="Manifestación de Oposición"
     )
-    fecha_suscripcion_documento = models.DateField(verbose_name="Fecha de Suscripción del Documento")
+    fecha_suscripcion_documento = models.DateField(verbose_name="Fecha de Suscripción del Documento,", null=True, blank=True)
 
     def __str__(self):
         return f"Oposición Donación Paciente {self.paciente_UUID}"
@@ -428,7 +432,7 @@ class Voluntad_Anticipada(models.Model):
         choices=DOCUMENTO_VOLUNTAD_ANTICIPADA_CHOICES,
         verbose_name="Documento Voluntad Anticipada"
     )
-    fecha_suscripcion_documento = models.DateField(verbose_name="Fecha de Suscripción del Documento")
+    fecha_suscripcion_documento = models.DateField(verbose_name="Fecha de Suscripción del Documento", null=True, blank=True)
     codigo_entidad_prestadora = models.ForeignKey(
         Entidad_Prestadora_Salud, on_delete=models.CASCADE, verbose_name="Entidad Prestadora"
     )
