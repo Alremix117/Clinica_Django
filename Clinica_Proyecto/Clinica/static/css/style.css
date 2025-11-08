@@ -15,4 +15,6 @@
 /* === COMPONENTES === */
 @import url("buttons.css");
 @import url("_forms.css");
+@import url('contacto_salud.css');
+
 /* (supongo que es 'form.css', puedes renombrarlo) */

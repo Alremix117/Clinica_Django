@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Clinica.views import (
-    crear_paciente, index, paciente_edit, paciente_list, paciente_detail, paciente_delete
+    crear_paciente, index, paciente_edit, paciente_list, paciente_detail, paciente_delete, contacto_salud_create, contacto_salud_details, contacto_salud_edit, contacto_salud_delete, contacto_salud_list
 )
 
 urlpatterns = [
@@ -28,4 +28,10 @@ urlpatterns = [
     path("pacientes/nuevo/", crear_paciente, name="paciente_create"),
     path("pacientes/<uuid:id>/eliminar/", paciente_delete, name="paciente_delete"),
     path("pacientes/<uuid:id>/editar/", paciente_edit, name="paciente_edit"),
+    path('pacientes/<uuid:id_paciente>/contactos/', contacto_salud_list, name='contacto_salud_list'),
+    path('pacientes/<uuid:id_paciente>/contactos/nuevo/', contacto_salud_create, name='contacto_salud_create'),
+    path('pacientes/<uuid:id_paciente>/contactos/<uuid:id_contacto>/', contacto_salud_details, name='contacto_salud_details'),
+    path('pacientes/<uuid:id_paciente>/contactos/<uuid:id_contacto>/editar/',contacto_salud_edit, name='contacto_salud_edit'),
+    path('pacientes/<uuid:id_paciente>/contactos/<uuid:id_contacto>/eliminar/', contacto_salud_delete, name='contacto_salud_delete'),
+    
 ]

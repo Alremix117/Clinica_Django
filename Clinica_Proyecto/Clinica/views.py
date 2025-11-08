@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
-from .models import Paciente, Paciente_Pais, Paciente_Discapacidad, Voluntad_Anticipada, Oposicion_Donacion
-from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion
+from .models import Paciente, Paciente_Pais, Paciente_Discapacidad, Voluntad_Anticipada, Oposicion_Donacion , Contacto_Servicio_Salud
+from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud
 
 def index(request):
     return render(request, "index.html", {"message": "Bienvenido a la Clínica"})  # Puedes personalizar esta vista según tus necesidades
@@ -125,3 +125,84 @@ def paciente_detail(request, id):
         "discapacidades": discapacidades,
     })
 
+#contacto servicio de salud
+# 📋 LISTAR CONTACTOS POR PACIENTE
+def contacto_salud_list(request, id_paciente):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id_paciente)
+    contactos = Contacto_Servicio_Salud.objects.filter(paciente_UUID=paciente).order_by('-fecha_hora_inicio_atencion')
+
+    return render(request, "contacto_salud/contacto_salud_list.html", {
+        "paciente": paciente,
+        "contactos": contactos,
+    })
+
+
+# ➕ CREAR CONTACTO
+@transaction.atomic
+def contacto_salud_create(request, id_paciente):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id_paciente)
+
+    if request.method == "POST":
+        form = FormContactoSalud(request.POST)
+        if form.is_valid():
+            contacto = form.save(commit=False)
+            contacto.paciente_UUID = paciente  # Relación explícita
+            contacto.save()
+            return redirect("contacto_salud_list", id_paciente=paciente.paciente_UUID)
+    else:
+        form = FormContactoSalud()
+
+    return render(request, "contacto_salud/contacto_salud_form.html", {
+        "form": form,
+        "paciente": paciente,
+        "titulo": "Registrar nuevo contacto de salud",
+    })
+
+
+# ✏️ EDITAR CONTACTO
+@transaction.atomic
+def contacto_salud_edit(request, id_paciente, id_contacto):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id_paciente)
+    contacto = get_object_or_404(Contacto_Servicio_Salud, id_contacto_UUID=id_contacto, paciente_UUID=paciente)
+
+    if request.method == "POST":
+        form = FormContactoSalud(request.POST, instance=contacto)
+        if form.is_valid():
+            form.save()
+            return redirect("contacto_salud_list", id_paciente=paciente.paciente_UUID)
+    else:
+        form = FormContactoSalud(instance=contacto)
+
+    return render(request, "contacto_salud/contacto_salud_edit.html", {
+        "form": form,
+        "paciente": paciente,
+        "contacto": contacto,
+        "titulo": "Editar contacto de salud",
+    })
+
+
+# 👁️ DETALLE DE CONTACTO
+def contacto_salud_details(request, id_paciente, id_contacto):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id_paciente)
+    contacto = get_object_or_404(Contacto_Servicio_Salud, id_contacto_UUID=id_contacto, paciente_UUID=paciente)
+
+    return render(request, "contacto_salud/contacto_salud_details.html", {
+        "paciente": paciente,
+        "contacto": contacto,
+    })
+
+
+# ❌ ELIMINAR CONTACTO
+@transaction.atomic
+def contacto_salud_delete(request, id_paciente, id_contacto):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id_paciente)
+    contacto = get_object_or_404(Contacto_Servicio_Salud, id_contacto_UUID=id_contacto, paciente_UUID=paciente)
+
+    if request.method == "POST":
+        contacto.delete()
+        return redirect("contacto_salud_list", id_paciente=paciente.paciente_UUID)
+
+    return render(request, "contacto_salud/contacto_salud_eliminar_confirmacion.html", {
+        "paciente": paciente,
+        "contacto": contacto,
+    })

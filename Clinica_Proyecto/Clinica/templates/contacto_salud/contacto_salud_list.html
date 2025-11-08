@@ -1,39 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}Contactos de Servicios de Salud{% endblock %}
+{% block title %}Contactos del Paciente{% endblock %}
 
 {% block content %}
-<h2>Contactos de Servicios de Salud</h2>
+<div class="contacto-container">
+<div class="contacto-header">
+  <h2>Contactos de Salud de {{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</h2>
 
-<a href="{% url 'contacto_salud_create' %}" class="btn">➕ Nuevo contacto</a>
+  <div class="actions">
+    <a href="{% url 'contacto_salud_create' id_paciente=paciente.paciente_UUID %}" class="btn btn-primary">➕ Nuevo contacto</a>
+    <a href="{% url 'paciente_detail' id=paciente.paciente_UUID %}" class="btn btn-secondary">⬅️ Volver al paciente</a>
+  </div>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Paciente</th>
-      <th>Entidad</th>
-      <th>Fecha Inicio</th>
-      <th>Grupo Servicio</th>
-      <th>Entorno</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for contacto in contactos %}
-    <tr>
-      <td>{{ contacto.paciente_UUID }}</td>
-      <td>{{ contacto.codigo_entidad_prestadora }}</td>
-      <td>{{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</td>
-      <td>{{ contacto.get_grupo_servicios_display }}</td>
-      <td>{{ contacto.get_entorno_atencion_display }}</td>
-      <td>
-        <a href="{% url 'contacto_salud_details' contacto.id_contacto_UUID %}" class="btn btn-small">🔍</a>
-        <a href="{% url 'contacto_salud_edit' contacto.id_contacto_UUID %}" class="btn btn-small">✏️</a>
-        <a href="{% url 'contacto_salud_eliminar_confirmacion' contacto.id_contacto_UUID %}" class="btn btn-small btn-danger">🗑️</a>
-      </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="6">No hay registros disponibles.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+  {% if contactos %}
+  <table class="contacto-list-table">
+    <thead>
+      <tr>
+        <th>Fecha Inicio Atención</th>
+        <th>Entidad Prestadora</th>
+        <th>Grupo Servicios</th>
+        <th>Entorno Atención</th>
+        <th>Diagnóstico</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contacto in contactos %}
+      <tr>
+        <td>{{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</td>
+        <td>{{ contacto.codigo_entidad_prestadora.nombre }}</td>
+        <td>{{ contacto.get_grupo_servicios_display }}</td>
+        <td>{{ contacto.get_entorno_atencion_display }}</td>
+        <td>{{ contacto.codigo_diagnostico.descripcion }}</td>
+        <td>
+          <a href="{% url 'contacto_salud_details' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-info btn-sm">👁️ Ver</a>
+          <a href="{% url 'contacto_salud_edit' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-warning btn-sm">✏️ Editar</a>
+          <a href="{% url 'contacto_salud_delete' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-danger btn-sm">🗑️ Eliminar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No hay contactos registrados para este paciente.</p>
+  {% endif %}
+</div>
 {% endblock %}

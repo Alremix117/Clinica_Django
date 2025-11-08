@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}{{ titulo }}{% endblock %}
+{% block title %}Nuevo Contacto{% endblock %}
 
 {% block content %}
-<h2>{{ titulo }}</h2>
+<div class="contacto-container">
+  <h2>{% if form.instance.pk %}Editar{% else %}Nuevo{% endif %} Contacto</h2>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn">💾 Guardar</button>
-  <a href="{% url 'contacto_salud_list' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+  <form method="post" class="contacto-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-success">Guardar</button>
+      <a href="{% url 'contacto_salud_list' id_paciente=paciente.paciente_UUID %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

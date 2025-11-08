@@ -2,15 +2,21 @@
 {% block title %}Eliminar Contacto{% endblock %}
 
 {% block content %}
-<h2>Eliminar Contacto</h2>
+<div class="contacto-container contacto-delete">
+  <h2>Confirmar eliminación</h2>
+  <p>¿Estás seguro de que deseas eliminar este contacto de atención médica?</p>
 
-<div class="alert alert-warning">
-  ¿Seguro que deseas eliminar el contacto del paciente <strong>{{ contacto.paciente_UUID }}</strong>?
+  <ul>
+    <li><strong>Fecha Inicio:</strong> {{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</li>
+    <li><strong>Entidad Prestadora:</strong> {{ contacto.codigo_entidad_prestadora }}</li>
+  </ul>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+      <a href="{% url 'contacto_salud_list' id_paciente=paciente.paciente_UUID %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
 </div>
-
-<form method="post">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
-  <a href="{% url 'contacto_salud_list' %}" class="btn btn-secondary">Cancelar</a>
-</form>
 {% endblock %}
