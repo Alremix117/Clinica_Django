@@ -1,0 +1,6 @@
+codigo_entidad_prestadora,nombre_entidad_prestadora,es_eps,es_ips,es_arl,es_aseguradora
+000001,Salud Total,01,02,02,02
+000002,SURA EPS,01,02,02,02
+000003,Clínica Medellín,02,01,02,02
+000004,ARL SURA,02,02,01,02
+000005,Sura Seguros,02,02,02,01

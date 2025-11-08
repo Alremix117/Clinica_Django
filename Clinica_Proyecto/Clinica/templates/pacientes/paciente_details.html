@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h2>Información del Paciente</h2>
+
+<p><strong>Documento:</strong> {{ paciente.numero_documento }}</p>
+<p><strong>Nombre:</strong> {{ paciente.primer_nombre }} {{ paciente.segundo_nombre }} {{ paciente.primer_apellido }} {{ paciente.segundo_apellido }}</p>
+<p><strong>Fecha de Nacimiento:</strong> {{ paciente.fecha_nacimiento|date:"Y-m-d H:i" }}</p>
+<p><strong>Sexo Biológico:</strong> {{ paciente.get_sexo_biologico_display }}</p>
+<p><strong>Identidad de Género:</strong> {{ paciente.get_identidad_genero_display }}</p>
+
+<p><strong>Entidad de Salud:</strong> {{ paciente.entidad_prestadora_salud }}</p>
+
+<h3>Nacionalidades</h3>
+<ul>
+    {% for pais in nacionalidades %}
+        <li>{{ pais.nombre_pais }}</li>
+    {% empty %}
+        <li>No registradas</li>
+    {% endfor %}
+</ul>
+
+<h3>Discapacidades</h3>
+<ul>
+    {% for disc in discapacidades %}
+        <li>{{ disc.nombre_discapacidad }}</li>
+    {% empty %}
+        <li>No registradas</li>
+    {% endfor %}
+</ul>
+
+<br>
+<a href="{% url 'paciente_list' %}">⬅ Volver al listado</a>
+{% endblock %}

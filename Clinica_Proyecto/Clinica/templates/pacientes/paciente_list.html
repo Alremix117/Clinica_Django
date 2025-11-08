@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Listado de Pacientes</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Documento</th>
+            <th>Nombre Completo</th>
+            <th>Sexo</th>
+            <th>Entidad Salud</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for paciente in pacientes %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ paciente.numero_documento }}</td>
+            <td>{{ paciente.primer_nombre }} {{ paciente.primer_apellido }}</td>
+            <td>{{ paciente.get_sexo_biologico_display }}</td>
+            <td>{{ paciente.entidad_prestadora_salud }}</td>
+            <td>
+                <a href="{% url 'paciente_detail' paciente.paciente_UUID %}">Ver</a> |
+                <a href="#">Editar</a> |
+                <a href="#">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No hay pacientes registrados.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<a href="#">➕ Registrar Paciente</a>
+
+{% endblock %}

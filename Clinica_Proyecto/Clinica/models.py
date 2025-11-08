@@ -307,7 +307,6 @@ class Paciente(models.Model):
     )
     primer_nombre = models.CharField(
         max_length=60, 
-        unique=True,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -315,11 +314,10 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Primer Nombre"
     )
     segundo_nombre = models.CharField(
         max_length=60, 
-        unique=True,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -327,11 +325,10 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Segundo Nombre"
     )
     primer_apellido = models.CharField(
-        max_length=60, 
-        unique=True,
+        max_length=60,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -339,11 +336,10 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Primer Apellido"
     )
     segundo_apellido = models.CharField(
-        max_length=60, 
-        unique=True,
+        max_length=60,
         validators=[
             MinLengthValidator(2),
             RegexValidator(
@@ -351,7 +347,7 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Segundo Apellido"
     )
     #fecha de nacimiento con formato YYYY-MM-DD HH:MM
     fecha_nacimiento = models.DateTimeField(verbose_name="Fecha de Nacimiento")
@@ -367,11 +363,11 @@ class Paciente(models.Model):
     entidad_prestadora_salud = models.ForeignKey(Entidad_Prestadora_Salud, on_delete=models.SET_NULL, null=True, verbose_name="Código Entidad Prestadora de Salud")
 
 
-    nacionalidad = models.ManyToManyField(Pais, through='Paciente_Pais', blank=True)
-    discapacidades = models.ManyToManyField(Discapacidad, through='Paciente_Discapacidad', blank=True)
+    nacionalidad = models.ManyToManyField(Pais, through='Paciente_Pais', related_name='pacientes', blank=True)
+    discapacidades = models.ManyToManyField(Discapacidad, through='Paciente_Discapacidad', related_name='pacientes', blank=True)
 
     def __str__(self):
-        return f"{self.primer_nombre} {self.primer_apellido} ({self.identificacion})"
+        return f"{self.primer_nombre} {self.primer_apellido} ({self.numero_documento})"
 
     class Meta:
         verbose_name = "Paciente"
@@ -379,8 +375,8 @@ class Paciente(models.Model):
         ordering = ["primer_apellido", "primer_nombre"]
 
 class Paciente_Discapacidad(models.Model):
-    id_discapacidad = models.OneToOneField(Discapacidad, on_delete=models.CASCADE)
-    paciente_UUID = models.OneToOneField(Paciente, on_delete=models.CASCADE)
+    id_discapacidad = models.ForeignKey(Discapacidad, on_delete=models.CASCADE, related_name='pacientes_rel')
+    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='discapacidades_rel')
 
     def __str__(self):
         return f"Discapacidad {self.id_discapacidad} del Paciente {self.paciente_UUID}"
@@ -411,8 +407,8 @@ class Oposicion_Donacion(models.Model):
         ordering = ["id_oposicion"]
 
 class Paciente_Pais(models.Model):
-    paciente_UUID = models.OneToOneField(Paciente, on_delete=models.CASCADE, primary_key=True)
-    codigo_pais = models.OneToOneField(Pais, on_delete=models.CASCADE)
+    paciente_UUID = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='paises_rel')
+    codigo_pais = models.ForeignKey(Pais, on_delete=models.CASCADE, related_name='pacientes_rel')
     
     def __str__(self):
         return f"País {self.codigo_pais} del Paciente {self.paciente_UUID}"

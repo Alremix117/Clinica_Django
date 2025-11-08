@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<h2>Registrar Paciente</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>Datos Generales</legend>
+        {{ form_paciente.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Nacionalidades</legend>
+        {{ form_nacionalidad.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Discapacidades</legend>
+        {{ form_discapacidad.as_p }}
+    </fieldset>
+
+    <button type="submit">Guardar</button>
+</form>
+{% endblock %}

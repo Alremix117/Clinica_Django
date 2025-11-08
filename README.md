@@ -16,14 +16,21 @@ El sistema permite administrar de forma estructurada información sobre diagnós
 
 ## ⚙️ Tecnologías principales
 
-| Componente         | Versión | Descripción                                         |
-| ------------------ | ------- | --------------------------------------------------- |
-| **Python**         | 3.10+   | Lenguaje principal del proyecto                     |
-| **Django**         | 5.2.7   | Framework web principal                             |
-| **django-jazzmin** | 3.0.1   | Tema visual moderno para el panel de administración |
-| **asgiref**        | 3.10.0  | Librería ASGI usada por Django                      |
-| **sqlparse**       | 0.5.3   | Utilidad interna de Django para SQL                 |
-| **tzdata**         | 2025.2  | Base de datos de zonas horarias                     |
+| Componente          | Versión     | Descripción                                         |
+| ------------------- | ----------- | --------------------------------------------------- |
+| **Python**          | 3.10+       | Lenguaje principal del proyecto                     |
+| **Django**          | 5.2.7       | Framework web principal                             |
+| **django-jazzmin**  | 3.0.1       | Tema visual moderno para el panel de administración |
+| **asgiref**         | 3.10.0      | Librería ASGI usada por Django                      |
+| **et_xmlfile**      | 2.0.0       | Soporte para archivos XML (usado por openpyxl)      |
+| **numpy**           | 2.3.4       | Librería para cálculos numéricos y matrices         |
+| **openpyxl**        | 3.1.5       | Lectura y escritura de archivos Excel (.xlsx)       |
+| **pandas**          | 2.3.3       | Manipulación y análisis de datos                    |
+| **python-dateutil** | 2.9.0.post0 | Manejo avanzado de fechas y tiempos                 |
+| **pytz**            | 2025.2      | Soporte para zonas horarias                         |
+| **six**             | 1.17.0      | Compatibilidad entre Python 2 y 3                   |
+| **sqlparse**        | 0.5.3       | Utilidad interna de Django para SQL                 |
+| **tzdata**          | 2025.2      | Base de datos de zonas horarias                     |
 
 ---
 
@@ -116,7 +123,24 @@ Sigue las instrucciones en pantalla para asignar usuario, correo y contraseña.
 
 ---
 
-### 7️⃣ Ejecutar el servidor de desarrollo
+### 7️⃣ Importar datos maestros (catálogos)
+
+Este proyecto incluye un comando personalizado para cargar datos iniciales (países, municipios, ocupaciones, tipos de documento, etc.) desde archivos CSV ubicados en Clinica/data/.
+Ejecuta el siguiente comando desde la raíz del proyecto:
+
+```bash
+python manage.py import_maestros --pais .\Clinica\data\pais.csv --municipio .\Clinica\data\municipio.csv --ocupacion .\Clinica\data\ocupacion.csv --etnia .\Clinica\data\etnia.csv --comunidad .\Clinica\data\comunidad_etnica.csv --discapacidad .\Clinica\data\discapacidad.csv --tipo_doc .\Clinica\data\tipo_documento.csv --entidad_prestadora .\Clinica\data\entidad_prestadora_salud.csv --modalidad_tec .\Clinica\data\modalidad_tecnologia.csv --via_ingreso .\Clinica\data\via_ingreso.csv --motivo_atencion .\Clinica\data\motivo_atencion.csv --enf_huerfana .\Clinica\data\enfermedad_huerfana.csv --diagnostico .\Clinica\data\diagnostico.csv
+```
+
+> ⚠️ **Tip:** Primero prueba con --dry-run para validar:
+
+```bash
+python manage.py import_maestros ... --dry-run
+```
+
+Si todo está correcto, ejecuta sin --dry-run para guardar los datos.
+
+### Ejecutar el servidor de desarrollo
 
 ```bash
 python manage.py runserver
@@ -132,14 +156,16 @@ http://127.0.0.1:8000/
 
 ## 🧰 Comandos útiles de Django
 
-| Acción                        | Comando                            |
-| ----------------------------- | ---------------------------------- |
-| Crear migraciones             | `python manage.py makemigrations`  |
-| Aplicar migraciones           | `python manage.py migrate`         |
-| Crear superusuario            | `python manage.py createsuperuser` |
-| Ejecutar servidor local       | `python manage.py runserver`       |
-| Verificar errores del sistema | `python manage.py check`           |
-| Actualizar dependencias       | `pip freeze > requirements.txt`    |
+| Acción                        | Comando                                      |
+| ----------------------------- | -------------------------------------------- |
+| Crear migraciones             | `python manage.py makemigrations`            |
+| Aplicar migraciones           | `python manage.py migrate`                   |
+| Crear superusuario            | `python manage.py createsuperuser`           |
+| Ejecutar servidor local       | `python manage.py runserver`                 |
+| Verificar errores del sistema | `python manage.py check`                     |
+| Actualizar dependencias       | `pip freeze > requirements.txt`              |
+| Validar importación           | `python manage.py import_maestros --dry-run` |
+| Importar datos maestros       | `python manage.py import_maestros`           |
 
 ---
 
