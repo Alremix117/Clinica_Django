@@ -1,168 +1,50 @@
-# views.py
-from django.contrib import messages
-from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, ListView, DeleteView
-# from django.contrib.auth.mixins import LoginRequiredMixin  # opcional
+from .models import Paciente, Paciente_Pais, Paciente_Discapacidad
+from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad
 
-from .models import Paciente
-from .forms import (
-    PacienteForm,
-    PacientePaisFormSet,
-    PacienteDiscapacidadFormSet,
-)
+def index(request):
+    return render(request, "index.html", {"message": "Bienvenido a la Clínica"})  # Puedes personalizar esta vista según tus necesidades
 
-# ----------------------------------------------------------------------
-# Mixin para manejar Inline Formsets con transacciones y validación clara
-# ----------------------------------------------------------------------
-class PacienteMixinFormsets:
-    """
-    Mixin para manejar inline formsets en Create/Update del Paciente.
-    - Construye formsets con prefijos explícitos (evita colisiones).
-    - Valida y guarda todo de forma atómica.
-    - Expone los formsets en el contexto como `paises_formset` y `discapacidad_formset`.
-    """
+@transaction.atomic
+def crear_paciente(request):
+    if request.method == "POST":
+        form_paciente = FormPaciente(request.POST)
+        form_nacionalidad = FormNacionalidad(request.POST)
+        form_discapacidad = FormDiscapacidad(request.POST)
 
-    paises_prefix = "paises"
-    disc_prefix = "discapacidades"
+        if form_paciente.is_valid() and form_nacionalidad.is_valid() and form_discapacidad.is_valid():
+            paciente = form_paciente.save()
 
-    def build_formsets(self, post_data=None):
-        """
-        Construye los formsets con o sin datos POST.
-        Usa prefijos explícitos para evitar colisiones.
-        """
-        kwargs = {"instance": self.object}
-        if post_data is not None:
-            kwargs["data"] = post_data
+            for pais in form_nacionalidad.cleaned_data['paises']:
+                Paciente_Pais.objects.create(paciente_UUID=paciente, codigo_pais=pais)
 
-        paises_fs = PacientePaisFormSet(prefix=self.paises_prefix, **kwargs)
-        disc_fs = PacienteDiscapacidadFormSet(prefix=self.disc_prefix, **kwargs)
-        return paises_fs, disc_fs
+            for disc in form_discapacidad.cleaned_data['discapacidades']:
+                Paciente_Discapacidad.objects.create(paciente_UUID=paciente, id_discapacidad=disc)
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        # Reutiliza formsets ya creados en POST; si no, crea nuevos
-        paises_fs = kwargs.get("paises_formset")
-        disc_fs = kwargs.get("discapacidad_formset")
-        if not (paises_fs and disc_fs):
-            paises_fs, disc_fs = self.build_formsets()
-        ctx["paises_formset"] = paises_fs
-        ctx["discapacidad_formset"] = disc_fs
-        return ctx
+            return redirect("pacientes/paciente_list.html")  # Cambia a tu URL real
+    else:
+        form_paciente = FormPaciente()
+        form_nacionalidad = FormNacionalidad()
+        form_discapacidad = FormDiscapacidad()
 
-    def validate_formsets(self, paises_fs, disc_fs):
-        """
-        Punto único para validaciones extra de negocio si las necesitas.
-        Retorna (bool, error_message|None).
-        """
-        # Ejemplo: exigir al menos una nacionalidad
-        # count_valid = sum(1 for f in paises_fs.forms
-        #                   if f.cleaned_data and not f.cleaned_data.get("DELETE", False) and f.cleaned_data.get("pais"))
-        # if count_valid < 1:
-        #     return False, "Debe registrar al menos una nacionalidad."
-        return True, None
+    return render(request, "pacientes/paciente_form.html", {
+        "form_paciente": form_paciente,
+        "form_nacionalidad": form_nacionalidad,
+        "form_discapacidad": form_discapacidad,
+    })
 
-    def save_formsets(self, paises_fs, disc_fs):
-        """
-        Guarda formsets. Separado para que sea testeable y extensible.
-        """
-        paises_fs.save()
-        disc_fs.save()
+def paciente_list(request):
+    pacientes = Paciente.objects.all()
+    return render(request, "pacientes/paciente_list.html", {"pacientes": pacientes})
 
-    def post(self, request, *args, **kwargs):
-        # Prepara self.object según Create/Update
-        if isinstance(self, CreateView):
-            self.object = None
-        else:
-            self.object = self.get_object()
+def paciente_detail(request, id):
+    paciente = get_object_or_404(Paciente, paciente_UUID=id)
+    nacionalidades = paciente.nacionalidad.all()
+    discapacidades = paciente.discapacidades.all()
 
-        form = self.get_form()
-        paises_fs, disc_fs = self.build_formsets(post_data=request.POST)
-
-        # Validación integral: form y formsets
-        if not (form.is_valid() and paises_fs.is_valid() and disc_fs.is_valid()):
-            messages.error(self.request, "Por favor corrige los errores en el formulario.")
-            return self.form_invalid(form=form, paises_formset=paises_fs, discapacidad_formset=disc_fs)
-
-        # Validaciones de negocio adicionales
-        ok, err = self.validate_formsets(paises_fs, disc_fs)
-        if not ok:
-            if err:
-                messages.error(self.request, err)
-            return self.form_invalid(form=form, paises_formset=paises_fs, discapacidad_formset=disc_fs)
-
-        # Guarda todo de forma atómica
-        with transaction.atomic():
-            response = self.form_valid(form)   # guarda Paciente
-            # Asegura que los formsets apunten al paciente recién guardado
-            paises_fs.instance = self.object
-            disc_fs.instance = self.object
-            self.save_formsets(paises_fs, disc_fs)
-        return response
-
-    # Permite pasar formsets a form_invalid y re-renderizar
-    def form_invalid(self, form, **kwargs):
-        return self.render_to_response(self.get_context_data(form=form, **kwargs))
-
-
-# ------------------------ READ: listar pacientes ------------------------
-class PacienteListView(ListView):
-    model = Paciente
-    template_name = "pacientes/paciente_list.html"
-    context_object_name = "pacientes"
-    paginate_by = 20  # opcional
-
-    def get_queryset(self):
-        qs = (Paciente.objects
-              .select_related(
-                  "tipo_documento", "residencia", "ocupacion",
-                  "etnia", "comunidad_Etnica", "entidad_prestadora_salud"
-              )
-              .prefetch_related("nacionalidad", "discapacidades")
-              .order_by("primer_apellido", "primer_nombre"))
-        q = self.request.GET.get("q")
-        if q:
-            from django.db.models import Q
-            qs = qs.filter(
-                Q(numero_documento__icontains=q) |
-                Q(primer_nombre__icontains=q) |
-                Q(segundo_nombre__icontains=q) |
-                Q(primer_apellido__icontains=q) |
-                Q(segundo_apellido__icontains=q)
-            )
-        return qs
-
-
-# ------------------------ DELETE: eliminar paciente ---------------------
-class PacienteDeleteView(SuccessMessageMixin, DeleteView):
-    model = Paciente
-    template_name = "pacientes/paciente_confirm_delete.html"
-    success_url = reverse_lazy("paciente_list")
-    success_message = "Paciente eliminado correctamente."
-
-    def get_queryset(self):
-        return (super().get_queryset()
-                .select_related(
-                    "tipo_documento", "residencia", "ocupacion",
-                    "etnia", "comunidad_Etnica", "entidad_prestadora_salud")
-                .prefetch_related("nacionalidad", "discapacidades"))
-
-
-# ------------------------ CREATE: crear paciente ------------------------
-class PacienteCreateView(SuccessMessageMixin, PacienteMixinFormsets, CreateView):
-    model = Paciente
-    form_class = PacienteForm
-    template_name = "pacientes/paciente_form.html"
-    success_url = reverse_lazy("paciente_list")
-    success_message = "Paciente creado correctamente."
-
-
-# ------------------------ UPDATE: actualizar paciente -------------------
-class PacienteUpdateView(SuccessMessageMixin, PacienteMixinFormsets, UpdateView):
-    model = Paciente
-    form_class = PacienteForm
-    template_name = "pacientes/paciente_form.html"
-    success_url = reverse_lazy("paciente_list")
-    success_message = "Paciente actualizado correctamente."
+    return render(request, "pacientes/paciente_details.html", {
+        "paciente": paciente,
+        "nacionalidades": nacionalidades,
+        "discapacidades": discapacidades,
+    })

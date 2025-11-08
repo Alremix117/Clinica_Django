@@ -314,7 +314,7 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Primer Nombre"
     )
     segundo_nombre = models.CharField(
         max_length=60, 
@@ -325,7 +325,7 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Segundo Nombre"
     )
     primer_apellido = models.CharField(
         max_length=60,
@@ -336,7 +336,7 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Primer Apellido"
     )
     segundo_apellido = models.CharField(
         max_length=60,
@@ -347,7 +347,7 @@ class Paciente(models.Model):
                 message='El primer nombre debe contener solo caracteres alfanuméricos'
             )
         ],  
-        verbose_name="Nombre del País"
+        verbose_name="Segundo Apellido"
     )
     #fecha de nacimiento con formato YYYY-MM-DD HH:MM
     fecha_nacimiento = models.DateTimeField(verbose_name="Fecha de Nacimiento")

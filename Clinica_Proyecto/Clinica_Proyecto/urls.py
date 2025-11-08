@@ -17,14 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from Clinica.views import (
-    PacienteListView, PacienteDeleteView,
-    PacienteCreateView, PacienteUpdateView
+    crear_paciente, index, paciente_list, paciente_detail
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("pacientes/", PacienteListView.as_view(), name="paciente_list"),
-    path("pacientes/nuevo/", PacienteCreateView.as_view(), name="paciente_create"),
-    path("pacientes/<uuid:pk>/editar/", PacienteUpdateView.as_view(), name="paciente_update"),
-    path("pacientes/<uuid:pk>/eliminar/", PacienteDeleteView.as_view(), name="paciente_delete"),
+    path('', index, name='index'),
+    path('pacientes/', paciente_list, name='paciente_list'),
+    path('pacientes/<uuid:id>/', paciente_detail, name='paciente_detail'),
+    path("pacientes/nuevo/", crear_paciente, name="paciente_create"),
 ]
