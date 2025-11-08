@@ -23,8 +23,8 @@
             <td>{{ paciente.entidad_prestadora_salud }}</td>
             <td>
                 <a href="{% url 'paciente_detail' paciente.paciente_UUID %}">Ver</a> |
-                <a href="#">Editar</a> |
-                <a href="#">Eliminar</a>
+                <a href="{% url 'paciente_edit' paciente.paciente_UUID %}">Editar</a> |
+                <a href="{% url 'paciente_delete' paciente.paciente_UUID %}">Eliminar</a>
             </td>
         </tr>
         {% empty %}
@@ -34,6 +34,6 @@
 </table>
 
 <br>
-<a href="#">➕ Registrar Paciente</a>
+<a href="{% url 'paciente_create' %}">➕ Registrar Paciente</a>
 
 {% endblock %}
