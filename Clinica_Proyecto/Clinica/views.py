@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from .models import Paciente, Paciente_Pais, Paciente_Discapacidad, Voluntad_Anticipada, Oposicion_Donacion , Contacto_Servicio_Salud
-from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud
+from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud, FormPacienteEdit
 
 def index(request):
     return render(request, "index.html", {"message": "Bienvenido a la Clínica"})  # Puedes personalizar esta vista según tus necesidades
@@ -51,11 +51,11 @@ def paciente_edit(request, id):
     paciente = get_object_or_404(Paciente, paciente_UUID=id)
 
     if request.method == "POST":
-        form_paciente = FormPaciente(request.POST, instance=paciente)
+        form_paciente = FormPacienteEdit(request.POST, instance=paciente)
         form_nacionalidad = FormNacionalidad(request.POST)
         form_discapacidad = FormDiscapacidad(request.POST)
-        form_voluntad = FormVoluntadAnticipada(request.POST)
-        form_oposicion = FormOposicionDonacion(request.POST)
+        form_voluntad = FormVoluntadAnticipada(request.POST, instance=paciente)
+        form_oposicion = FormOposicionDonacion(request.POST, instance=paciente)
 
         if form_paciente.is_valid() and form_nacionalidad.is_valid() and form_discapacidad.is_valid():
             form_paciente.save() and form_voluntad.save() and form_oposicion.save()
@@ -84,7 +84,7 @@ def paciente_edit(request, id):
         nacionalidades_actuales = paciente.nacionalidad.values_list('codigo_pais', flat=True)
         discapacidades_actuales = paciente.discapacidades.values_list('id_discapacidad', flat=True)
 
-        form_paciente = FormPaciente(instance=paciente)
+        form_paciente = FormPacienteEdit(instance=paciente)
         form_nacionalidad = FormNacionalidad(initial={'paises': nacionalidades_actuales})
         form_discapacidad = FormDiscapacidad(initial={'discapacidades': discapacidades_actuales})
         form_voluntad = FormVoluntadAnticipada(instance=Voluntad_Anticipada.objects.get(paciente_UUID=paciente))
