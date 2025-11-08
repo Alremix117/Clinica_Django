@@ -1,0 +1,18 @@
+/* ===========================
+   style.css
+   Archivo principal de estilos
+   =========================== */
+
+/* === BASE === */
+@import url("_reset.css");
+@import url("base.css");
+@import url("typografia.css");
+
+/* === LAYOUT === */
+@import url("header.css");
+@import url("main.css");
+
+/* === COMPONENTES === */
+@import url("buttons.css");
+@import url("_forms.css");
+/* (supongo que es 'form.css', puedes renombrarlo) */

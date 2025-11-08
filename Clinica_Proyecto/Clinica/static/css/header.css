@@ -1,0 +1,12 @@
+.site-header {
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: 1.5rem 0;
+    box-shadow: var(--shadow-soft);
+}
+
+.site-title {
+    text-align: center;
+    font-size: var(--font-size-heading);
+    letter-spacing: 1px;
+}

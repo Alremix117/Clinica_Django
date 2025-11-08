@@ -1,0 +1,7 @@
+main {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: var(--radius);
+    margin-top: 2rem;
+    box-shadow: var(--shadow-soft);
+}

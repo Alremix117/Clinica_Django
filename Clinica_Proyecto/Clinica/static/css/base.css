@@ -1,0 +1,23 @@
+:root {
+    /* Colores principales */
+    --color-primary: #0077b6;
+    --color-secondary: #00b4d8;
+    --color-accent: #90e0ef;
+    --color-bg: #f4f8fb;
+    --color-text: #2d3e50;
+    --color-border: #ced4da;
+
+    /* Colores de estado */
+    --success: #198754;
+    --error: #dc3545;
+    --warning: #ffc107;
+
+    /* Tipografía */
+    --font-main: "Inter", "Segoe UI", Roboto, sans-serif;
+    --font-size-base: 16px;
+    --font-size-heading: 1.8rem;
+
+    /* Bordes y sombras */
+    --radius: 10px;
+    --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
