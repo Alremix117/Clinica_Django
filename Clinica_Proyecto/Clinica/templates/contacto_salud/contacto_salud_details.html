@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Detalle del Contacto{% endblock %}
+
+{% block content %}
+<h2>Detalle del Contacto</h2>
+
+<div class="card">
+  <p><strong>Paciente:</strong> {{ contacto.paciente_UUID }}</p>
+  <p><strong>Entidad Prestadora:</strong> {{ contacto.codigo_entidad_prestadora }}</p>
+  <p><strong>Fecha Inicio Atención:</strong> {{ contacto.fecha_hora_inicio_atencion }}</p>
+  <p><strong>Grupo de Servicios:</strong> {{ contacto.get_grupo_servicios_display }}</p>
+  <p><strong>Entorno de Atención:</strong> {{ contacto.get_entorno_atencion_display }}</p>
+  <p><strong>Clasificación Triage:</strong> {{ contacto.get_clasificacion_triage_display }}</p>
+  <p><strong>Diagnóstico:</strong> {{ contacto.codigo_diagnostico }}</p>
+  <p><strong>Tipo de Diagnóstico:</strong> {{ contacto.get_tipo_diagnostico_display }}</p>
+</div>
+
+<a href="{% url 'contacto_salud_list' %}" class="btn">⬅ Volver al listado</a>
+{% endblock %}

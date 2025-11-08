@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Eliminar Contacto{% endblock %}
+
+{% block content %}
+<h2>Eliminar Contacto</h2>
+
+<div class="alert alert-warning">
+  ¿Seguro que deseas eliminar el contacto del paciente <strong>{{ contacto.paciente_UUID }}</strong>?
+</div>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">🗑️ Eliminar</button>
+  <a href="{% url 'contacto_salud_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

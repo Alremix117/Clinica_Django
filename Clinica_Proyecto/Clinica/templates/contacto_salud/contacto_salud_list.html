@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Contactos de Servicios de Salud{% endblock %}
+
+{% block content %}
+<h2>Contactos de Servicios de Salud</h2>
+
+<a href="{% url 'contacto_salud_create' %}" class="btn">➕ Nuevo contacto</a>
+
+<table>
+  <thead>
+    <tr>
+      <th>Paciente</th>
+      <th>Entidad</th>
+      <th>Fecha Inicio</th>
+      <th>Grupo Servicio</th>
+      <th>Entorno</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contacto in contactos %}
+    <tr>
+      <td>{{ contacto.paciente_UUID }}</td>
+      <td>{{ contacto.codigo_entidad_prestadora }}</td>
+      <td>{{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</td>
+      <td>{{ contacto.get_grupo_servicios_display }}</td>
+      <td>{{ contacto.get_entorno_atencion_display }}</td>
+      <td>
+        <a href="{% url 'contacto_salud_details' contacto.id_contacto_UUID %}" class="btn btn-small">🔍</a>
+        <a href="{% url 'contacto_salud_edit' contacto.id_contacto_UUID %}" class="btn btn-small">✏️</a>
+        <a href="{% url 'contacto_salud_eliminar_confirmacion' contacto.id_contacto_UUID %}" class="btn btn-small btn-danger">🗑️</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No hay registros disponibles.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
