@@ -17,4 +17,51 @@
 @import url("_forms.css");
 @import url('contacto_salud.css');
 
+/* Estilos para el contenedor */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Navegación */
+.main-nav {
+    margin-top: 1rem;
+}
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.main-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.main-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none; /* Eliminar subrayado al pasar el ratón */
+}
+
+/* Footer */
+.site-footer {
+    background-color: var(--color-primary);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.site-footer p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
 /* (supongo que es 'form.css', puedes renombrarlo) */

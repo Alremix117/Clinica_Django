@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2>Bienvenido al Dashboard, {{ user.username }}</h2>
+
+    <p>Desde aquí puedes acceder a las funcionalidades del sistema:</p>
+
+    <div class="dashboard-links">
+        <a href="{% url 'paciente_list' %}" class="btn btn-secondary">Gestión de Pacientes</a>
+        <a href="{% url 'paciente_create' %}" class="btn btn-primary">Registrar Nuevo Paciente</a>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Sesión</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 2rem;
+        background: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-soft);
+        text-align: center;
+    }
+    .dashboard-container h2 {
+        color: var(--color-primary);
+        margin-bottom: 1.5rem;
+    }
+    .dashboard-container p {
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+    .dashboard-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    .dashboard-links .btn {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
