@@ -100,6 +100,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = 'dashboard' # Redirige a una nueva vista 'dashboard' después del login
+LOGOUT_REDIRECT_URL = 'index'    # Redirige a la página principal después del logout
+
 # Configuración de Jazzmin
 JAZZMIN_SETTINGS = {
     "site_title": "Clínica",
