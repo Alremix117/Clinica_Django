@@ -4,13 +4,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Mi Blog Django{% endblock %}</title>
+    <title>{% block title %}Clínica PAJD{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     {% block extra_css %}{% endblock %}
   </head>
   <body>
     <header class="site-header">
       <div class="container">
+        <h1 class="site-title">Clínica PAJD</h1>
+        <nav class="main-nav">
+          <ul>
+            <li><a href="{% url 'index' %}">Inicio</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+              <li><a href="{% url 'paciente_list' %}">Pacientes</a></li>
+              <!-- Los contactos de salud se acceden desde el detalle del paciente -->
+              <li><a href="{% url 'logout' %}">Cerrar Sesión ({{ user.username }})</a></li>
+            {% else %}
+              <li><a href="{% url 'register' %}">Registrarse</a></li>
+              <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+            {% endif %}
+          </ul>
+        </nav>
       </div>
     </header>
 
@@ -22,6 +38,7 @@
 
     <footer class="site-footer">
       <div class="container">
+        <p>&copy; 2025 Clínica PAJD. Todos los derechos reservados.</p>
       </div>
     </footer>
 

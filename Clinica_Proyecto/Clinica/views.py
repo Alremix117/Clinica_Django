@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required # Importar para proteger vistas
+
 from .models import Paciente, Paciente_Pais, Paciente_Discapacidad, Voluntad_Anticipada, Oposicion_Donacion , Contacto_Servicio_Salud
 from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud, FormPacienteEdit
 
@@ -206,3 +210,45 @@ def contacto_salud_delete(request, id_paciente, id_contacto):
         "paciente": paciente,
         "contacto": contacto,
     })
+
+# Vistas de Autenticación
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # Iniciar sesión automáticamente después del registro
+            return redirect('dashboard') # Redirigir a una página de bienvenida para usuarios
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form, 'title': 'Registro de Usuario'})
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard') # Redirigir al dashboard después del login
+            else:
+                # Opcional: añadir un mensaje de error si la autenticación falla
+                pass
+    else:
+        form = AuthenticationForm()
+    return render(request, 'registration/login.html', {'form': form, 'title': 'Iniciar Sesión'})
+
+@login_required # Protege esta vista, solo accesible para usuarios autenticados
+def logout_view(request):
+    logout(request)
+    return redirect('index') # Redirigir a la página principal
+
+@login_required
+def dashboard(request):
+    """
+    Página de bienvenida para usuarios logeados.
+    Desde aquí pueden navegar a Pacientes o Contactos de Salud.
+    """
+    return render(request, 'dashboard.html', {'user': request.user, 'title': 'Dashboard'})
