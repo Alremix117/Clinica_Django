@@ -1,6 +1,9 @@
 id_discapacidad,nombre_discapacidad
-01,Auditiva
-02,Visual
-03,Motriz
-04,Cognitiva
-05,Psicosocial
+01,Discapacidad física
+02,Discapacidad visual
+03,Discapacidad auditiva
+04,Discapacidad intelectual
+05,Discapacidad sicosocial (mental)
+06,Sordoceguera
+07,Discapacidad Múltiple
+08,Sin Discapacidad

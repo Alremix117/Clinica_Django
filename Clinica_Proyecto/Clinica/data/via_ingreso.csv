@@ -1,4 +1,15 @@
 codigo_via_ingreso_usuario_servicio_salud,nombre_via_ingreso_usuario_servicio_salud
-01,Consulta Externa
-02,Urgencias
-03,Hospitalización
+01,Demanda espontánea
+02,Derivado de consulta externa
+03,Derivado de urgencias
+04,Derivado de hospitalización
+05,Derivado de sala de cirugía
+06,Derivado de sala de partos
+07,Recién nacido de la institución
+08,Recién nacido de otra institución
+09,Derivado o referido de hospitalización domiciliaria
+10,Derivado de atención domiciliaria
+11,Derivado de telemedicina
+12,Derivado de jornada de salud
+13,Referido de otra institución
+14,Contra referido a otra institución
