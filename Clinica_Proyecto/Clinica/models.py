@@ -55,8 +55,7 @@ class Municipio(models.Model):
         verbose_name="Código municipio DIVIPOLA del DANE"
     )
     nombre_municipio = models.CharField(
-        max_length=200, 
-        unique=True,
+        max_length=200,
         validators=[
             MinLengthValidator(3),
             # Expresion regular para validar que sean solo caracteres alfanumericos con espacios
@@ -91,8 +90,7 @@ class Ocupacion(models.Model):
         verbose_name="Código Catálogo CIUO-88A.C de ocupación"
     )
     nombre_ocupacion = models.CharField(
-        max_length=200, 
-        unique=True,
+        max_length=200,
         validators=[
             MinLengthValidator(3),
             # Expresion regular para validar que sean solo caracteres alfanumericos con espacios
