@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required # Importar para proteger vistas
 
 from .models import Paciente, Paciente_Pais, Paciente_Discapacidad, Voluntad_Anticipada, Oposicion_Donacion , Contacto_Servicio_Salud
-from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud, FormPacienteEdit
+from .forms import FormPaciente, FormNacionalidad, FormDiscapacidad, FormVoluntadAnticipada, FormOposicionDonacion, FormContactoSalud, FormPacienteEdit, FormVoluntadAnticipadaEdit, FormOposicionDonacionEdit, FormContactoSaludEdit
 
 def index(request):
     return render(request, "index.html", {"message": "Bienvenido a la Clínica"})
@@ -60,8 +60,8 @@ def paciente_edit(request, id):
         form_paciente = FormPacienteEdit(request.POST, instance=paciente)
         form_nacionalidad = FormNacionalidad(request.POST)
         form_discapacidad = FormDiscapacidad(request.POST)
-        form_voluntad = FormVoluntadAnticipada(request.POST, instance=paciente)
-        form_oposicion = FormOposicionDonacion(request.POST, instance=paciente)
+        form_voluntad = FormVoluntadAnticipadaEdit(request.POST, instance=paciente)
+        form_oposicion = FormOposicionDonacionEdit(request.POST, instance=paciente)
 
         if form_paciente.is_valid() and form_nacionalidad.is_valid() and form_discapacidad.is_valid():
             form_paciente.save() # Guardamos los datos del paciente
@@ -81,8 +81,8 @@ def paciente_edit(request, id):
             Voluntad_Anticipada_obj, created = Voluntad_Anticipada.objects.get_or_create(paciente_UUID=paciente)
             Oposicion_Donacion_obj, created = Oposicion_Donacion.objects.get_or_create(paciente_UUID=paciente)
 
-            form_voluntad = FormVoluntadAnticipada(request.POST, instance=Voluntad_Anticipada_obj)
-            form_oposicion = FormOposicionDonacion(request.POST, instance=Oposicion_Donacion_obj)
+            form_voluntad = FormVoluntadAnticipadaEdit(request.POST, instance=Voluntad_Anticipada_obj)
+            form_oposicion = FormOposicionDonacionEdit(request.POST, instance=Oposicion_Donacion_obj)
 
             if form_voluntad.is_valid() and form_oposicion.is_valid():
                 form_voluntad.save()
@@ -104,8 +104,8 @@ def paciente_edit(request, id):
         voluntad_anticipada_instance, created = Voluntad_Anticipada.objects.get_or_create(paciente_UUID=paciente)
         oposicion_donacion_instance, created = Oposicion_Donacion.objects.get_or_create(paciente_UUID=paciente)
 
-        form_voluntad = FormVoluntadAnticipada(instance=voluntad_anticipada_instance)
-        form_oposicion = FormOposicionDonacion(instance=oposicion_donacion_instance)
+        form_voluntad = FormVoluntadAnticipadaEdit(instance=voluntad_anticipada_instance)
+        form_oposicion = FormOposicionDonacionEdit(instance=oposicion_donacion_instance)
 
     return render(request, "pacientes/paciente_edit.html", {
         "form_paciente": form_paciente,
@@ -195,12 +195,12 @@ def contacto_salud_edit(request, id_paciente, id_contacto):
     contacto = get_object_or_404(Contacto_Servicio_Salud, id_contacto_UUID=id_contacto, paciente_UUID=paciente)
 
     if request.method == "POST":
-        form = FormContactoSalud(request.POST, instance=contacto)
+        form = FormContactoSaludEdit(request.POST, instance=contacto)
         if form.is_valid():
             form.save()
             return redirect("contacto_salud_list", id_paciente=paciente.paciente_UUID)
     else:
-        form = FormContactoSalud(instance=contacto)
+        form = FormContactoSaludEdit(instance=contacto)
 
     return render(request, "contacto_salud/contacto_salud_edit.html", {
         "form": form,

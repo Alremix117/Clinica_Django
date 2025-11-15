@@ -28,10 +28,10 @@
       {% for contacto in contactos %}
       <tr>
         <td>{{ contacto.fecha_hora_inicio_atencion|date:"d/m/Y H:i" }}</td>
-        <td>{{ contacto.codigo_entidad_prestadora.nombre }}</td>
+        <td>{{ contacto.codigo_entidad_prestadora.nombre_entidad_prestadora }}</td>
         <td>{{ contacto.get_grupo_servicios_display }}</td>
         <td>{{ contacto.get_entorno_atencion_display }}</td>
-        <td>{{ contacto.codigo_diagnostico.descripcion }}</td>
+        <td>{{ contacto.codigo_diagnostico.nombre_diagnostico }}</td>
         <td>
           <a href="{% url 'contacto_salud_details' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-info btn-sm">👁️ Ver</a>
           <a href="{% url 'contacto_salud_edit' id_paciente=paciente.paciente_UUID id_contacto=contacto.id_contacto_UUID %}" class="btn btn-warning btn-sm">✏️ Editar</a>
