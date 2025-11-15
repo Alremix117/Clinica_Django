@@ -38,7 +38,7 @@ class FormPacienteEdit(forms.ModelForm):
         model = Paciente
         fields = [
             'tipo_documento', 'numero_documento', 'primer_nombre', 'segundo_nombre',
-            'primer_apellido', 'segundo_apellido',
+            'primer_apellido', 'segundo_apellido','fecha_nacimiento',
             'sexo_biologico', 'identidad_genero', 'zona_territorial_residencia',
             'residencia', 'ocupacion', 'etnia',
             'comunidad_Etnica', 'entidad_prestadora_salud'
@@ -82,6 +82,27 @@ class FormOposicionDonacion(forms.ModelForm):
         input_formats=['%Y-%m-%d %H:%M'],
         required=False
     )
+    
+    class Meta:
+        model = Oposicion_Donacion
+        fields = ['manifestacion_oposicion', 'fecha_suscripcion_documento']
+        labels = {
+            'manifestacion_oposicion': "¿Se opone a la donación?",
+            'fecha_suscripcion_documento': "Fecha de Documento",
+        }
+
+class FormVoluntadAnticipadaEdit(forms.ModelForm):
+    
+    class Meta:
+        model = Voluntad_Anticipada
+        fields = ['documento_voluntad_anticipada', 'fecha_suscripcion_documento', 'codigo_entidad_prestadora']
+        labels = {
+            'documento_voluntad_anticipada': "¿Existe Voluntad Anticipada?",
+            'fecha_suscripcion_documento': "Fecha de Documento",
+            'codigo_entidad_prestadora': "Entidad donde se registró",
+        }
+
+class FormOposicionDonacionEdit(forms.ModelForm):
 
     class Meta:
         model = Oposicion_Donacion
@@ -102,6 +123,44 @@ class FormContactoSalud(forms.ModelForm):
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         label="Fecha y Hora Triage"
     )
+
+    class Meta:
+        model = Contacto_Servicio_Salud
+        fields = [
+            'fecha_hora_inicio_atencion',
+            'codigo_entidad_prestadora',
+            'codigo_modalidad_realizacion_tecnologia_salud',
+            'grupo_servicios',
+            'entorno_atencion',
+            'codigo_via_ingreso_usuario_servicio_salud',
+            'codigo_causa_motivo_atencion',
+            'fecha_hora_triage',
+            'clasificacion_triage',
+            'codigo_diagnostico',
+            'codigo_enfermedad_huerfana',
+            'tipo_diagnostico',
+        ]
+        labels = {
+            'codigo_entidad_prestadora': 'Entidad Prestadora de Salud',
+            'codigo_modalidad_realizacion_tecnologia_salud': 'Modalidad de Realización',
+            'grupo_servicios': 'Grupo de Servicios',
+            'entorno_atencion': 'Entorno de Atención',
+            'codigo_via_ingreso_usuario_servicio_salud': 'Vía de Ingreso',
+            'codigo_causa_motivo_atencion': 'Motivo de Atención',
+            'clasificacion_triage': 'Clasificación Triage',
+            'codigo_diagnostico': 'Código Diagnóstico',
+            'codigo_enfermedad_huerfana': 'Enfermedad Huérfana',
+            'tipo_diagnostico': 'Tipo de Diagnóstico',
+        }
+
+        widgets = {
+            'grupo_servicios': forms.Select(attrs={'class': 'form-control'}),
+            'entorno_atencion': forms.Select(attrs={'class': 'form-control'}),
+            'clasificacion_triage': forms.Select(attrs={'class': 'form-control'}),
+            'tipo_diagnostico': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class FormContactoSaludEdit(forms.ModelForm):
 
     class Meta:
         model = Contacto_Servicio_Salud
