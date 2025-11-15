@@ -572,18 +572,17 @@ class Enfermedad_Huerfana(models.Model):
 class Diagnostico(models.Model):
     codigo_diagnostico = models.CharField(
         primary_key=True,
-        max_length=4,
+        max_length=7,
         validators=[
-            MinLengthValidator(4),
             RegexValidator(
-                regex='^[A-Za-z0-9]{4}$',
+                regex='^[A-Za-z0-9]{7}$',
                 message='El código debe contener caracteres alfanuméricos.'
             )
         ],
         verbose_name="Código del Diagnóstico"
     )
     nombre_diagnostico = models.CharField(
-        max_length=200,
+        max_length=500,
         validators=[
             MinLengthValidator(3),
             RegexValidator(
