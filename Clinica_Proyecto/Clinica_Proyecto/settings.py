@@ -102,6 +102,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LOGIN_REDIRECT_URL = 'dashboard' # Redirige a una nueva vista 'dashboard' después del login
 LOGOUT_REDIRECT_URL = 'index'    # Redirige a la página principal después del logout
+# settings.py
+LOGIN_URL = '/login/' # O la URL de tu vista de login
 
 # Configuración de Jazzmin
 JAZZMIN_SETTINGS = {
